@@ -1,0 +1,14 @@
+{
+  "name": "computer-database",
+  "version": "1.0.0",
+  "scripts": {
+    "cy:open": "npx cypress open",
+    "cy:run": "npx cypress run"
+  },
+  "keywords": [],
+  "author": "Kiryl",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^11.2.0"
+  }
+}

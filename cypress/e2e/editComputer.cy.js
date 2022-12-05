@@ -1,0 +1,56 @@
+describe('Negative tests to ensure a failure validation displays for edit computer Commodore 64', () => {
+  it('Edit computer with empty Computer name', () => {
+    cy.visit('https://computer-database.gatling.io/computers')
+    cy.get('#searchbox').type('Commodore 64')
+    cy.get('#searchsubmit').click()
+    cy.get('[href="/computers/51"]').click()
+    cy.get('#name').click().clear()
+    cy.get('.primary').click()
+    cy.contains('Failed to refine type : Predicate isEmpty() did not fail.').should('be.visible')
+  })
+
+  it('Edit computer with invalid Introduced data', () => {
+    cy.visit('https://computer-database.gatling.io/computers')
+    cy.get('#searchbox').type('Commodore 64')
+    cy.get('#searchsubmit').click()
+    cy.get('[href="/computers/51"]').click()
+    cy.get('#introduced').click().clear().type('test data')
+    cy.get('.primary').click()
+    cy.contains('Failed to decode date : java.time.format.DateTimeParseException: Text \'test data\' could not be parsed at index 0').should('be.visible')
+  })
+
+  it('Edit computer with invalid Discontinued data', () => {
+    cy.visit('https://computer-database.gatling.io/computers')
+    cy.get('#searchbox').type('Commodore 64')
+    cy.get('#searchsubmit').click()
+    cy.get('[href="/computers/51"]').click()
+    cy.get('#discontinued').click().clear().type('test data')
+    cy.get('.primary').click()
+    cy.contains('Failed to decode date : java.time.format.DateTimeParseException: Text \'test data\' could not be parsed at index 0').should('be.visible')
+  })
+})
+
+describe('Positive test to ensure that valid data is updated successfully for computer Commodore 64', () => {
+  it('Edit computer Company with valid data', () => {
+    cy.visit('https://computer-database.gatling.io/computers')
+    cy.get('#searchbox').type('Commodore 64')
+    cy.get('#searchsubmit').click()
+    cy.get('[href="/computers/51"]').click()
+    cy.get('select#company').select('Acorn computer')
+    cy.get('.primary').click()
+    cy.get('#searchbox').click().type('Commodore 64')
+    cy.get('#searchsubmit').click()
+    cy.get('tbody > :nth-child(1) > :nth-child(4)').should('have.text', 'Acorn computer')
+  })
+  it('Edit computer Introduced date with valid data', () => {
+    cy.visit('https://computer-database.gatling.io/computers')
+    cy.get('#searchbox').type('Commodore 64')
+    cy.get('#searchsubmit').click()
+    cy.get('[href="/computers/51"]').click()
+    cy.get('#introduced').click().clear().type('1990-12-01')
+    cy.get('.primary').click()
+    cy.get('#searchbox').click().type('Commodore 64')
+    cy.get('#searchsubmit').click()
+    cy.get('tbody > :nth-child(1) > :nth-child(2)').should('have.text', '01 Dec 1990')
+  })
+})
